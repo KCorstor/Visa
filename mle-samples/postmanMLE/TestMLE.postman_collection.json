@@ -1,0 +1,220 @@
+{
+	"info": {
+		"_postman_id": "ae7c9c69-3564-43cc-920f-6694ed109f53",
+		"name": "TestMLE",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "a_Encrypt",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "84d98144-2340-48f3-aa64-32aba4784fc1",
+						"exec": [
+							"pm.globals.set(\"kid\",pm.request.headers.get(\"kid\"));"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "0c668aa5-1ab3-4b66-9058-bca2c5ceb170",
+						"exec": [
+							"var jsonData = pm.response.json();",
+							"pm.globals.set(\"req_body\",jsonData.encData);",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Accept",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "kid",
+						"value": "<ENTERKEYID>",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": " \r\n{\r\n\"amount\": \"124.05\",\r\n\"senderAddress\": \"901 Metro Center Blvd\",\r\n\"localTransactionDateTime\": \"2020-09-09T12:01:29\",\r\n\"pointOfServiceData\": {\r\n\"panEntryMode\": \"90\",\r\n\"posConditionCode\": \"00\",\r\n\"motoECIIndicator\": \"0\"\r\n},\r\n\"recipientPrimaryAccountNumber\": \"4957030420210496\",\r\n\"colombiaNationalServiceData\": {\r\n\"addValueTaxReturn\": \"10.00\",\r\n\"taxAmountConsumption\": \"10.00\",\r\n\"nationalNetReimbursementFeeBaseAmount\": \"20.00\",\r\n\"addValueTaxAmount\": \"10.00\",\r\n\"nationalNetMiscAmount\": \"10.00\",\r\n\"countryCodeNationalService\": \"170\",\r\n\"nationalChargebackReason\": \"11\",\r\n\"emvTransactionIndicator\": \"1\",\r\n\"nationalNetMiscAmountType\": \"A\",\r\n\"costTransactionIndicator\": \"0\",\r\n\"nationalReimbursementFee\": \"20.00\"\r\n},\r\n\"cardAcceptor\": {\r\n\"address\": {\r\n\"country\": \"USA\",\r\n\"zipCode\": \"94404\",\r\n\"county\": \"San Mateo\",\r\n\"state\": \"CA\"\r\n},\r\n\"idCode\": \"CA-IDCode-77765\",\r\n\"name\": \"Visa Inc. USA-Foster City\",\r\n\"terminalId\": \"TID-9999\"\r\n},\r\n\"senderReference\": \"\",\r\n\"transactionIdentifier\": \"381228649430015\",\r\n\"acquirerCountryCode\": \"840\",\r\n\"acquiringBin\": \"408999\",\r\n\"retrievalReferenceNumber\": \"412770451018\",\r\n\"senderCity\": \"Foster City\",\r\n\"senderStateCode\": \"CA\",\r\n\"systemsTraceAuditNumber\": \"451018\",\r\n\"senderName\": \"Mohammed Qasim\",\r\n\"businessApplicationId\": \"AA\",\r\n\"settlementServiceIndicator\": \"9\",\r\n\"merchantCategoryCode\": \"6012\",\r\n\"transactionCurrencyCode\": \"USD\",\r\n\"recipientName\": \"rohan\",\r\n\"senderCountryCode\": \"124\",\r\n\"sourceOfFundsCode\": \"05\",\r\n\"senderAccountNumber\": \"4653459515756154\"\r\n}"
+				},
+				"url": {
+					"raw": "localhost:3000/encrypt",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"encrypt"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "b_VDRequest",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "84d98144-2340-48f3-aa64-32aba4784fc1",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "0c668aa5-1ab3-4b66-9058-bca2c5ceb170",
+						"exec": [
+							"var jsonData = pm.response.json();",
+							"pm.globals.set(\"res_body\",jsonData.encData);",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "<ENTERPASSWORD>",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "<ENTERUSERNAME>",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Accept",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "keyId",
+						"type": "text",
+						"value": "{{kid}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"encData\":\"{{req_body}}\"}"
+				},
+				"url": {
+					"raw": "https://sandbox.api.visa.com/visadirect/fundstransfer/v1/pushfundstransactions",
+					"protocol": "https",
+					"host": [
+						"sandbox",
+						"api",
+						"visa",
+						"com"
+					],
+					"path": [
+						"visadirect",
+						"fundstransfer",
+						"v1",
+						"pushfundstransactions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "c_Decrpyt",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "84d98144-2340-48f3-aa64-32aba4784fc1",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "0c668aa5-1ab3-4b66-9058-bca2c5ceb170",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Accept",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"encData\":\"{{res_body}}\"}"
+				},
+				"url": {
+					"raw": "localhost:3000/decrypt",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"decrypt"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
